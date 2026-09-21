@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng Ký Tài Khoản</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 330px;
+        }
+
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            .form-group input, .form-group select {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+
+        .btn {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+            .btn:hover {
+                background: #218838;
+            }
+
+        .msg {
+            color: red;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+            .link a {
+                color: #007bff;
+                text-decoration: none;
+            }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>📝 Đăng Ký Tài Khoản</h2>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="msg">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <form action="/register" method="POST">
+            <div class="form-group">
+                <label>Tài khoản mới:</label>
+                <input type="text" name="tai_khoan" required placeholder="Tạo tên tài khoản">
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu:</label>
+                <input type="password" name="mat_khau" required placeholder="Tạo mật khẩu">
+            </div>
+            <div class="form-group">
+                <label>Loại Tài Khoản (Vai trò):</label>
+                <select name="vai_tro">
+                    <option value="NhanVien">Nhân viên (Chỉ xem đơn hàng)</option>
+                    <option value="Admin">Admin (Toàn quyền hệ thống)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Tạo Tài Khoản</button>
+        </form>
+        <div class="link">
+            Đã có tài khoản? <a href="/login">Đăng nhập</a>
+        </div>
+    </div>
+</body>
+</html>

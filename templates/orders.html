@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Đơn Hàng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+        }
+
+        header {
+            background: #333;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            header h1 {
+                margin: 0;
+                font-size: 20px;
+            }
+
+            header a {
+                color: #fff;
+                text-decoration: none;
+                background: #555;
+                padding: 8px 15px;
+                border-radius: 4px;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #f8f9fa;
+        }
+
+        .form-status {
+            display: flex;
+            gap: 5px;
+        }
+
+            .form-status select {
+                padding: 4px;
+                border-radius: 4px;
+                border: 1px solid #ccc;
+            }
+
+            .form-status button {
+                background: #007bff;
+                color: white;
+                border: none;
+                padding: 4px 8px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 12px;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📦 Danh Sách Đơn Hàng Đã Đặt</h1>
+        <div>
+            <span style="margin-right: 15px;">Xin chào: <b>{{ user_name }}</b> ({{ user_role }})</span>
+            {% if user_role == 'Admin' %}
+            <a href="/admin" style="background: #28a745;">⚙️ Quản Lý Món</a>
+            {% endif %}
+            <a href="/logout" style="background: #dc3545;">🚪 Đăng Xuất</a>
+            <a href="/">⬅ Xem Trang Chủ</a>
+        </div>
+    </header>
+    <div class="container">
+        <h2>Lịch Sử Đơn Hàng Khách Đặt</h2>
+        {% if don_hang %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Mã Đơn</th>
+                    <th>Tên Khách Hàng</th>
+                    <th>Số Điện Thoại</th>
+                    <th>Địa Chỉ</th>
+                    <th>Tổng Tiền</th>
+                    <th>Thời Gian</th>
+                    <th>Trạng Thái Hiện Tại</th>
+                    <th>Đổi Trạng Thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dh in don_hang %}
+                <tr>
+                    <td><b>#{{ dh.id }}</b></td>
+                    <td>{{ dh.ten_khach }}</td>
+                    <td>{{ dh.sdt }}</td>
+                    <td>{{ dh.diachi }}</td>
+                    <td style="color: red; font-weight: bold;">{{ dh.tong_tien }} VNĐ</td>
+                    <td>{{ dh.ngay_dat.strftime('%H:%M - %d/%m') }}</td>
+                    <td><b>{{ dh.trang_thai }}</b></td>
+                    <td>
+                        <form action="/admin/cap-nhat-don-hang/{{ dh.id }}" method="POST" class="form-status">
+                            <select name="trang_thai">
+                                <option value="Chờ xử lý">Chờ xử lý</option>
+                                <option value="Đang giao">Đang giao</option>
+                                <option value="Hoàn thành">Hoàn thành</option>
+                                <option value="Đã hủy">Đã hủy</option>
+                            </select>
+                            <button type="submit">Lưu</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="text-align: center; color: #666; margin: 30px 0;">Chưa có đơn hàng nào được đặt!</p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ Hàng Của Bạn</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+        }
+
+        header {
+            background: #ff5722;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #f8f9fa;
+        }
+
+        .btn-qty {
+            padding: 3px 8px;
+            text-decoration: none;
+            background: #eee;
+            color: #333;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .btn-del {
+            color: #dc3545;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .total-box {
+            text-align: right;
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-radius;
+            }
+
+        .btn-order {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="margin:0; font-size:20px;">🛒 Giỏ Hàng Của Bạn</h1>
+        <a href="/" style="color:white; text-decoration:none; font-weight:bold;">⬅ Quay lại mua sắm</a>
+    </header>
+
+    <div class="container">
+        {% if danh_sach_mua %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Món Ăn</th>
+                    <th>Đơn Giá</th>
+                    <th>Số Lượng</th>
+                    <th>Thành Tiền</th>
+                    <th>Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in danh_sach_mua %}
+                <tr>
+                    <td><b>{{ item.ten }}</b></td>
+                    <td>{{ "{:,}".format(item.gia) }} VNĐ</td>
+                    <td>
+                        <a href="/cap-nhat-gio-hang/{{ item.id }}/giam" class="btn-qty">-</a>
+                        <span style="margin: 0 8px; font-weight: bold;">{{ item.so_luong }}</span>
+                        <a href="/cap-nhat-gio-hang/{{ item.id }}/tang" class="btn-qty">+</a>
+                    </td>
+                    <td style="color: #dc3545; font-weight: bold;">{{ "{:,}".format(item.thanh_tien) }} VNĐ</td>
+                    <td><a href="/cap-nhat-gio-hang/{{ item.id }}/xoa" class="btn-del">🗑️ Xóa</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total-box">
+            Tổng cộng: <b style="color: #dc3545; font-size: 22px;">{{ "{:,}".format(tong_tien) }} VNĐ</b>
+        </div>
+
+        <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+
+        <h3>📝 Thông Tin Giao Hàng</h3>
+        <form action="/dat-hang" method="POST">
+            <div class="form-group">
+                <label>Họ và Tên người nhận:</label>
+                <input type="text" name="ten_khach" required placeholder="Ví dụ: Nguyễn Văn A">
+            </div>
+            <div class="form-group">
+                <label>Số điện thoại liên hệ:</label>
+                <input type="tel" name="sdt" required placeholder="Ví dụ: 0987654321">
+            </div>
+            <div class="form-group">
+                <label>Địa chỉ nhận hàng chi tiết:</label>
+                <input type="text" name="diachi" required placeholder="Ví dụ: 123 Đường ABC, Phường X, Quận Y">
+            </div>
+            <button type="submit" class="btn-order">🛵 ĐẶT HÀNG NGAY</button>
+        </form>
+        {% else %}
+        <div style="text-align: center; padding: 40px 0;">
+            <p style="font-size: 18px; color: #666;">Giỏ hàng của bạn đang trống!</p>
+            <a href="/" style="display: inline-block; padding: 10px 20px; background: #ff5722; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">Khám phá danh sách đồ ăn</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
