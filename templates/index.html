@@ -2,202 +2,337 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Cửa Hàng Đồ Ăn Vặt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUÁN ĂN NGON - Thực Đơn</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f4f4f4;
-        }
-
-        header {
-            background: #ff5722;
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-            header h1 {
-                margin: 0;
-                font-size: 24px;
-            }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        header a {
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .btn-cart {
-            background: #e64a19;
-        }
-
-        .btn-admin {
-            background: #333;
-        }
-
-        .btn-login {
-            background: #007bff;
-        }
-
-        .btn-logout {
-            background: #dc3545;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 15px;
-        }
-
-        .search-box {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-            .search-box input {
-                flex: 1;
-                padding: 10px 15px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                font-size: 15px;
-            }
-
-            .search-box button {
-                background: #007bff;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                cursor: pointer;
-                font-weight: bold;
-            }
-
-        /* CỘT DANH MỤC PHÂN LOẠI */
-        .category-filter {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-
-        .category-btn {
-            text-decoration: none;
-            padding: 8px 20px;
-            background: #e0e0e0;
-            color: #333;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-            .category-btn.active {
-                background: #ff5722;
-                color: white;
-            }
-
-        .food-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .food-card {
-            background: white;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-            .food-card img {
-                width: 100%;
-                height: 150px;
-                object-fit: cover;
-                border-radius: 6px;
-            }
-
-            .food-card h3 {
-                font-size: 16px;
-                margin: 15px 0 10px 0;
-            }
-
-            .food-card .price {
-                color: #dc3545;
-                font-weight: bold;
-                margin-bottom: 15px;
-            }
-
-        .btn-add {
-            background: #28a745;
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            display: inline-block;
-            font-weight: bold;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
     </style>
 </head>
-<body>
-    <header>
-        <h1>Cửa Hàng Đồ Ăn Vặt</h1>
-        <div class="nav-links">
-            {% if user_name %}
-            <span style="margin-right: 10px;">👤 Xin chào: <b>{{ user_name }}</b></span>
-            {% if user_role == 'Admin' %}
-            <a href="/admin" class="btn-admin">⚙️ Quản Lý (Admin)</a>
-            {% else %}
-            <a href="/admin/don-hang" class="btn-admin">📦 Quản Lý Đơn</a>
-            {% endif %}
-            <a href="/logout" class="btn-logout">🚪 Đăng Xuất</a>
-            {% else %}
-            <a href="/login" class="btn-login">🔑 Đăng Nhập</a>
-            {% endif %}
-            <a href="/gio-hang" class="btn-cart">🛒 Xem Giỏ Hàng</a>
-        </div>
-    </header>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
 
-    <div class="container">
-        <!-- THANH TÌM KIẾM -->
-        <form action="/" method="GET" class="search-box">
-            <input type="text" name="tu_khoa" value="{{ tu_khoa }}" placeholder="Nhập tên món ăn cần tìm (ví dụ: Bánh tráng, Trà sữa)...">
-            {% if danh_muc %}<input type="hidden" name="danh_muc" value="{{ danh_muc }}">{% endif %}
-            <button type="submit">🔍 Tìm kiếm</button>
-        </form>
+    <!-- NAVIGATION BAR -->
+    <nav class="bg-gradient-to-r from-red-600 via-red-500 to-orange-500 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3 text-2xl font-black tracking-wide">
+                <span class="bg-white text-red-600 w-10 h-10 rounded-full flex items-center justify-center text-xl shadow">🍜</span>
+                <span class="hidden sm:inline">QUÁN ĂN NGON</span>
+            </a>
+            <div class="flex items-center gap-2 sm:gap-3">
+                {% if session.get('logged_in') %}
+                <!-- NÚT XEM ĐƠN HÀNG CỦA TÔI -->
+                <button onclick="openOrderStatusModal()" class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-3 py-2 rounded-xl text-xs sm:text-sm transition shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left"></i> <span class="hidden sm:inline">Đơn Hàng Của Tôi</span>
+                </button>
 
-        <!-- THANH LỌC PHÂN LOẠI -->
-        <div class="category-filter">
-            <a href="/?tu_khoa={{ tu_khoa }}" class="category-btn {% if not danh_muc %}active{% endif %}">Tất Cả</a>
-            <a href="/?danh_muc=Đồ ăn&tu_khoa={{ tu_khoa }}" class="category-btn {% if danh_muc == 'Đồ ăn' %}active{% endif %}">🍔 Đồ Ăn</a>
-            <a href="/?danh_muc=Đồ uống&tu_khoa={{ tu_khoa }}" class="category-btn {% if danh_muc == 'Đồ uống' %}active{% endif %}">🧋 Đồ Uống</a>
-        </div>
+                <span class="bg-red-700/60 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold flex items-center gap-2 border border-white/20">
+                    <i class="fa-solid fa-user-shield text-yellow-300"></i> {{ session.get('username') }}
+                </span>
 
-        <h2>Danh Sách {% if danh_muc %}{{ danh_muc }}{% else %}Món Ăn{% endif %}</h2>
-        <div class="food-grid">
-            {% for mon in mon_an %}
-            <div class="food-card">
-                <img src="{{ mon.hinh }}" alt="{{ mon.ten }}">
-                <h3>{{ mon.ten }}</h3>
-                <div class="price">{{ mon.gia }} VNĐ</div>
-                <a href="/them-gio-hang/{{ mon.id }}" class="btn-add">Thêm vào giỏ</a>
+                {% if session.get('role') in ['admin', 'staff'] %}
+                <a href="/admin" class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-3 py-2 rounded-xl text-xs sm:text-sm transition shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line"></i> <span class="hidden sm:inline">Trang Admin</span>
+                </a>
+                {% endif %}
+
+                <a href="/logout" class="bg-white/10 hover:bg-white/20 text-white font-medium px-3 py-2 rounded-xl text-xs sm:text-sm transition border border-white/30" title="Đăng xuất">
+                    <i class="fa-solid fa-right-from-bracket sm:hidden"></i>
+                    <span class="hidden sm:inline">Đăng Xuất</span>
+                </a>
+                {% else %}
+                <a href="/login" class="bg-white text-red-600 hover:bg-gray-100 font-bold px-4 py-2 rounded-xl text-sm transition shadow-md">
+                    Đăng Nhập
+                </a>
+                {% endif %}
             </div>
-            {% else %}
-            <p style="grid-column: 1 / -1; text-align: center; color: #666;">Không tìm thấy món nào phù hợp!</p>
-            {% endfor %}
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <div class="bg-gradient-to-b from-orange-500 via-orange-400 to-amber-500 text-white py-12 px-4 text-center relative overflow-hidden shadow-inner">
+        <div class="relative z-10 max-w-3xl mx-auto">
+            <h1 class="text-3xl sm:text-5xl font-black mb-3 tracking-tight drop-shadow-md">Thực Đơn Món Ngon Mỗi Ngày</h1>
+            <p class="text-orange-100 text-sm sm:text-lg mb-8 font-medium">Thưởng thức hương vị tuyệt hảo. Chọn món & thanh toán dễ dàng qua Chuyển Khoản / QR MoMo!</p>
+
+            <!-- SEARCH BAR -->
+            <div class="relative max-w-xl mx-auto shadow-2xl rounded-2xl">
+                <input type="text" id="searchInput" onkeyup="filterMenu()" placeholder="🔍 Tìm kiếm món ăn, thức uống, đồ ăn vặt..."
+                       class="w-full pl-12 pr-4 py-3.5 sm:py-4 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium placeholder-gray-400 shadow-inner text-sm sm:text-base">
+            </div>
         </div>
     </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- BỘ LỌC DANH MỤC -->
+        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-10" id="categoryContainer">
+            <button onclick="filterCategory('ALL')" class="category-btn border-2 border-red-500 bg-red-500 text-white font-bold px-5 py-2 rounded-full shadow-md transition-all hover:scale-105 flex items-center gap-2 text-xs sm:text-sm">
+                <i class="fa-solid fa-utensils"></i> Tất Cả Món
+            </button>
+            <button onclick="filterCategory('MÓN CHÍNH')" class="category-btn border-2 border-gray-200 bg-white text-gray-700 hover:border-red-500 font-bold px-5 py-2 rounded-full shadow-sm transition-all hover:scale-105 flex items-center gap-2 text-xs sm:text-sm">
+                🍲 Đồ Ăn
+            </button>
+            <button onclick="filterCategory('ĐỒ UỐNG')" class="category-btn border-2 border-gray-200 bg-white text-gray-700 hover:border-red-500 font-bold px-5 py-2 rounded-full shadow-sm transition-all hover:scale-105 flex items-center gap-2 text-xs sm:text-sm">
+                🧋 Thức Uống
+            </button>
+            <button onclick="filterCategory('ĐỒ ĂN VẶT')" class="category-btn border-2 border-gray-200 bg-white text-gray-700 hover:border-red-500 font-bold px-5 py-2 rounded-full shadow-sm transition-all hover:scale-105 flex items-center gap-2 text-xs sm:text-sm">
+                🍿 Đồ Ăn Vặt
+            </button>
+        </div>
+
+        <!-- FOOD GRID -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8" id="foodGrid">
+            {% for food in foods %}
+            <div class="food-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col justify-between border border-gray-100 group"
+                 data-name="{{ food[1] | lower }}"
+                 data-category="{{ food[2] }}">
+
+                <div>
+                    <div class="relative h-48 sm:h-52 overflow-hidden bg-gray-100">
+                        <img src="{{ food[4] if food[4] else 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500' }}"
+                             alt="{{ food[1] }}"
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-red-600 font-extrabold text-[10px] sm:text-xs px-3 py-1.5 rounded-full shadow uppercase tracking-wider">
+                            {{ food[2] }}
+                        </span>
+                    </div>
+
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg sm:text-xl text-gray-900 mb-2 group-hover:text-red-600 transition-colors line-clamp-1">{{ food[1] }}</h3>
+                        <p class="text-xl sm:text-2xl font-black text-red-600 mb-4">{{ "{:,.0f}".format(food[3]) }} <span class="text-xs sm:text-sm font-semibold text-gray-500">VNĐ</span></p>
+                    </div>
+                </div>
+
+                <div class="px-5 pb-5">
+                    <button onclick="openOrderModal('{{ food[0] }}', '{{ food[1] }}', '{{ food[3] }}')"
+                            class="w-full bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:shadow-red-500/30 transition-all flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-cart-plus"></i> Đặt Món Ngay
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div id="noResults" class="hidden text-center py-16">
+            <div class="text-6xl mb-4">🔍</div>
+            <h3 class="text-xl font-bold text-gray-700 mb-2">Không tìm thấy món ăn phù hợp</h3>
+        </div>
+    </div>
+
+    <!-- MODAL ĐẶT HÀNG -->
+    <div id="orderModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl transform transition-all scale-95 duration-200" id="modalBox">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h3 class="text-xl font-black text-gray-800 flex items-center gap-2">
+                    🛒 Đặt Món Ăn
+                </h3>
+                <button onclick="closeOrderModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            </div>
+
+            <form action="/order-checkout" method="POST" class="space-y-3">
+                <input type="hidden" name="food_id" id="modalFoodId">
+
+                <div class="bg-orange-50 p-3 rounded-2xl border border-orange-100">
+                    <div class="font-bold text-base text-orange-900" id="modalFoodName">Món Ăn</div>
+                    <div class="text-lg font-black text-red-600 mt-0.5"><span id="modalFoodPrice">0</span> VNĐ</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Số Lượng:</label>
+                        <input type="number" name="quantity" value="1" min="1" required class="w-full px-3 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-red-500 outline-none font-bold text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Số Bàn (nếu có):</label>
+                        <input type="text" name="table_number" placeholder="Ví dụ: Bàn 5" class="w-full px-3 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-red-500 outline-none text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Tên Của Bạn *:</label>
+                    <input type="text" name="customer_name" placeholder="Nhập họ và tên..." required class="w-full px-3 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-red-500 outline-none text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Số Điện Thoại *:</label>
+                    <input type="tel" name="customer_phone" placeholder="Nhập số điện thoại..." required class="w-full px-3 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-red-500 outline-none text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Địa Chỉ Giao Hàng (Nếu giao tận nơi):</label>
+                    <input type="text" name="address" placeholder="Nhập số nhà, tên đường..." class="w-full px-3 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-red-500 outline-none text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Hình Thức Thanh Toán:</label>
+                    <select name="payment_method" class="w-full px-3 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-red-500 outline-none font-semibold text-sm">
+                        <option value="CASH">💵 Tiền Mặt</option>
+                        <option value="MOMO">📱 QR MoMo / Chuyển Khoản</option>
+                    </select>
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="button" onclick="closeOrderModal()" class="w-1/2 py-2.5 rounded-xl border border-gray-300 font-bold text-gray-600 hover:bg-gray-100 transition text-sm">Hủy</button>
+                    <button type="submit" class="w-1/2 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold shadow-lg transition text-sm">Xác Nhận Đặt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL POPUP: XEM TRẠNG THÁI / QUY TRÌNH ĐƠN HÀNG -->
+    <div id="orderStatusModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col max-h-[85vh]">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 class="text-lg sm:text-xl font-extrabold text-gray-800 flex items-center gap-2">
+                    📋 Tiến Trình Đơn Hàng Của Bạn
+                </h3>
+                <button onclick="closeOrderStatusModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            </div>
+
+            <div class="overflow-y-auto space-y-4 pr-1 flex-1">
+                {% if my_orders %}
+                {% for order in my_orders %}
+                <div class="border rounded-2xl p-4 bg-gray-50/80 shadow-sm">
+                    <div class="flex justify-between items-center border-b border-gray-200 pb-3 mb-3">
+                        <div>
+                            <span class="font-bold text-gray-900">Đơn hàng #{{ order[0] }}</span>
+                            {% if order[6] %}<span class="text-xs text-gray-500 ml-1">({{ order[6] }})</span>{% endif %}
+                        </div>
+                        <div class="text-xs sm:text-sm font-black text-red-600">
+                            {{ order[1] }} x{{ order[2] }} - {{ "{:,.0f}".format(order[3]) }} VNĐ
+                        </div>
+                    </div>
+
+                    <!-- Thanh Tiến Trình 4 Bước -->
+                    {% if order[4] not in ['Cancelled', 'Hủy'] %}
+                    <div class="flex items-center justify-between text-[11px] sm:text-xs font-semibold pt-2">
+                        <!-- Bước 1: Tiếp Nhận -->
+                        <div class="text-center flex-1">
+                            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold text-white mx-auto mb-1 transition-all
+                                        {% if order[4] in ['Pending', 'Chờ', 'Cooking', 'Đang nấu', 'Shipping', 'Delivering', 'Đang giao', 'Completed', 'Đã Giao', 'Hoàn Thành'] %}bg-emerald-500 ring-4 ring-emerald-100{% else %}bg-gray-300{% endif %}">
+                                <i class="fa-solid fa-receipt text-xs sm:text-sm"></i>
+                            </div>
+                            <span class="{% if order[4] in ['Pending', 'Chờ'] %}text-emerald-600 font-bold{% endif %}">Tiếp Nhận</span>
+                        </div>
+
+                        <!-- Bước 2: Đang Chế Biến -->
+                        <div class="text-center flex-1">
+                            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold text-white mx-auto mb-1 transition-all
+                                        {% if order[4] in ['Cooking', 'Đang nấu', 'Shipping', 'Delivering', 'Đang giao', 'Completed', 'Đã Giao', 'Hoàn Thành'] %}bg-emerald-500 ring-4 ring-emerald-100 {% if order[4] in ['Cooking', 'Đang nấu'] %}animate-bounce bg-amber-500{% endif %}{% else %}bg-gray-300{% endif %}">
+                                <i class="fa-solid fa-fire text-xs sm:text-sm"></i>
+                            </div>
+                            <span class="{% if order[4] in ['Cooking', 'Đang nấu'] %}text-amber-600 font-bold{% endif %}">Đang Chế Biến</span>
+                        </div>
+
+                        <!-- Bước 3: Đang Giao / Phục Vụ -->
+                        <div class="text-center flex-1">
+                            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold text-white mx-auto mb-1 transition-all
+                                        {% if order[4] in ['Shipping', 'Delivering', 'Đang giao', 'Completed', 'Đã Giao', 'Hoàn Thành'] %}bg-emerald-500 ring-4 ring-emerald-100 {% if order[4] in ['Shipping', 'Delivering', 'Đang giao'] %}animate-pulse bg-purple-500{% endif %}{% else %}bg-gray-300{% endif %}">
+                                <i class="fa-solid fa-motorcycle text-xs sm:text-sm"></i>
+                            </div>
+                            <span class="{% if order[4] in ['Shipping', 'Delivering', 'Đang giao'] %}text-purple-600 font-bold{% endif %}">Đang Giao</span>
+                        </div>
+
+                        <!-- Bước 4: Hoàn Thành -->
+                        <div class="text-center flex-1">
+                            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold text-white mx-auto mb-1 transition-all
+                                        {% if order[4] in ['Completed', 'Đã Giao', 'Hoàn Thành'] %}bg-emerald-500 ring-4 ring-emerald-100{% else %}bg-gray-300{% endif %}">
+                                <i class="fa-solid fa-check text-xs sm:text-sm"></i>
+                            </div>
+                            <span class="{% if order[4] in ['Completed', 'Đã Giao', 'Hoàn Thành'] %}text-emerald-600 font-bold{% endif %}">Hoàn Thành</span>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="p-2.5 bg-red-100 text-red-700 text-xs rounded-xl text-center font-bold">
+                        ❌ Đơn hàng này đã bị hủy.
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="text-center py-10 text-gray-400 font-medium">
+                    <i class="fa-solid fa-box-open text-4xl mb-2 block"></i>
+                    Bạn chưa có đơn hàng nào!
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT ĐIỀU KHIỂN -->
+    <script>
+        let currentCategory = 'ALL';
+
+        function filterMenu() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.food-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name');
+                const category = card.getAttribute('data-category');
+
+                const matchesSearch = name.includes(searchValue);
+                const matchesCategory = (currentCategory === 'ALL') || (category.toUpperCase().includes(currentCategory));
+
+                if (matchesSearch && matchesCategory) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.getElementById('noResults').style.display = (visibleCount === 0) ? 'block' : 'none';
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+
+            const buttons = document.querySelectorAll('.category-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-red-500', 'text-white', 'border-red-500');
+                btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+            });
+
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+                event.currentTarget.classList.add('bg-red-500', 'text-white', 'border-red-500');
+            }
+
+            filterMenu();
+        }
+
+        function openOrderModal(id, name, price) {
+            document.getElementById('modalFoodId').value = id;
+            document.getElementById('modalFoodName').innerText = name;
+            document.getElementById('modalFoodPrice').innerText = Number(price).toLocaleString('vi-VN');
+            document.getElementById('orderModal').classList.remove('hidden');
+            document.getElementById('orderModal').classList.add('flex');
+        }
+
+        function closeOrderModal() {
+            document.getElementById('orderModal').classList.add('hidden');
+            document.getElementById('orderModal').classList.remove('flex');
+        }
+
+        function openOrderStatusModal() {
+            document.getElementById('orderStatusModal').classList.remove('hidden');
+            document.getElementById('orderStatusModal').classList.add('flex');
+        }
+
+        function closeOrderStatusModal() {
+            document.getElementById('orderStatusModal').classList.add('hidden');
+            document.getElementById('orderStatusModal').classList.remove('flex');
+        }
+    </script>
 </body>
 </html>

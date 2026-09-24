@@ -2,108 +2,52 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Đăng Nhập Quản Trị</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .box {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            width: 320px;
-        }
-
-        h2 {
-            margin-top: 0;
-            text-align: center;
-            color: #333;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-            .form-group label {
-                display: block;
-                margin-bottom: 5px;
-                font-weight: bold;
-            }
-
-            .form-group input {
-                width: 93%;
-                padding: 8px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
-
-        .btn {
-            width: 100%;
-            background: #007bff;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-            .btn:hover {
-                background: #0056b3;
-            }
-
-        .msg {
-            color: red;
-            text-align: center;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .link {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
-            .link a {
-                color: #007bff;
-                text-decoration: none;
-            }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập Hệ Thống</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="box">
-        <h2>🔒 Đăng Nhập Admin</h2>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        {% for message in messages %}
-        <div class="msg">{{ message }}</div>
-        {% endfor %}
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-md w-full border border-gray-700">
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-yellow-400 flex items-center justify-center gap-2">
+                🔑 Đăng Nhập Hệ Thống
+            </h1>
+            <p class="text-gray-400 text-xs mt-1">Dành cho Khách Hàng, Nhân Viên & Quản Lý</p>
+        </div>
+
+        {% if error %}
+        <div class="bg-red-500/10 border border-red-500 text-red-400 text-xs p-3 rounded-lg mb-4 text-center">
+            {{ error }}
+        </div>
         {% endif %}
-        {% endwith %}
-        <form action="/login" method="POST">
-            <div class="form-group">
-                <label>Tài khoản:</label>
-                <input type="text" name="tai_khoan" required placeholder="Nhập tên tài khoản">
+
+        <!-- Thêm autocomplete="off" vào form -->
+        <form action="/login" method="POST" class="space-y-4" autocomplete="off">
+            <div>
+                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Tên đăng nhập</label>
+                <!-- Thêm autocomplete="off" -->
+                <input type="text" name="username" required placeholder="Nhập username..." autocomplete="off" class="w-full bg-gray-700 text-white p-3 rounded-xl border border-gray-600 focus:outline-none focus:border-yellow-400 text-sm">
             </div>
-            <div class="form-group">
-                <label>Mật khẩu:</label>
-                <input type="password" name="mat_khau" required placeholder="Nhập mật khẩu">
+
+            <div>
+                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Mật khẩu</label>
+                <!-- Thêm autocomplete="new-password" để chặn trình duyệt tự điền pass cũ -->
+                <input type="password" name="password" required placeholder="••••••••" autocomplete="new-password" class="w-full bg-gray-700 text-white p-3 rounded-xl border border-gray-600 focus:outline-none focus:border-yellow-400 text-sm">
             </div>
-            <button type="submit" class="btn">Đăng Nhập</button>
+
+            <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-extrabold py-3 rounded-xl transition shadow-lg text-sm uppercase">
+                Đăng Nhập
+            </button>
         </form>
-        <div class="link">
-            Chưa có tài khoản? <a href="/register">Đăng ký ngay</a><br><br>
-            <a href="/">⬅ Quay về trang chủ</a>
+
+        <div class="mt-6 text-center border-t border-gray-700 pt-4">
+            <p class="text-gray-400 text-xs">
+                Chưa có tài khoản?
+                <a href="/register" class="text-yellow-400 hover:underline font-bold">Tạo tài khoản Khách Hàng</a>
+            </p>
         </div>
     </div>
+
 </body>
 </html>

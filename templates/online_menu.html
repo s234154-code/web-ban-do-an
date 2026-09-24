@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Món Online - Giao Tận Nơi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Navbar Header -->
+    <nav class="bg-red-600 text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold flex items-center gap-2">🍔 Nhóm Ăn Vặt Online</h1>
+            <a href="/kitchen" class="bg-white text-red-600 font-bold px-4 py-1.5 rounded-full text-sm hover:bg-gray-100 transition">
+                👨‍🍳 Màn Hình Bếp
+            </a>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- CỘT BÊN TRÁI: DANH SÁCH MÓN ĂN (2 Cột) -->
+        <div class="lg:col-span-2 space-y-4">
+            <h2 class="text-xl font-bold text-gray-800">Thực Đơn Hôm Nay</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% for item in foods %}
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-red-500 uppercase bg-red-50 px-2 py-1 rounded">{{ item[2] }}</span>
+                        <h3 class="text-lg font-bold text-gray-800 mt-2">{{ item[1] }}</h3>
+                        <p class="text-xl font-extrabold text-red-600 mt-2">{{ "{:,.0f}".format(item[3]) }}đ</p>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-gray-500 italic col-span-2">Chưa có món ăn nào trong hệ thống.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- CỘT BÊN PHẢI: FORM ĐẶT HÀNG (Bấm chọn món & gửi đơn) -->
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 h-fit sticky top-24">
+            <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
+                🛒 Đặt Món Trực Tuyến
+            </h2>
+
+            <form action="/order-online" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Chọn món muốn ăn *</label>
+                    <select name="food_id" required class="w-full border p-2.5 rounded-lg text-sm bg-gray-50 border-gray-300 focus:ring-2 focus:ring-red-400 focus:bg-white outline-none">
+                        {% for item in foods %}
+                        <option value="{{ item[0] }}">{{ item[1] }} - {{ "{:,.0f}".format(item[3]) }}đ</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Số lượng phần *</label>
+                    <input type="number" name="quantity" min="1" value="1" required class="w-full border p-2 rounded-lg text-sm bg-gray-50 border-gray-300 focus:ring-2 focus:ring-red-400 focus:bg-white outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Họ tên người nhận *</label>
+                    <input type="text" name="customer_name" placeholder="Nguyễn Văn A" required class="w-full border p-2 rounded-lg text-sm bg-gray-50 border-gray-300 focus:ring-2 focus:ring-red-400 focus:bg-white outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Số điện thoại *</label>
+                    <input type="tel" name="customer_phone" placeholder="0909123456" required class="w-full border p-2 rounded-lg text-sm bg-gray-50 border-gray-300 focus:ring-2 focus:ring-red-400 focus:bg-white outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Địa chỉ giao hàng chi tiết *</label>
+                    <textarea name="address" placeholder="Số nhà, tên đường, phường/xã..." required class="w-full border p-2 rounded-lg text-sm bg-gray-50 border-gray-300 h-20 focus:ring-2 focus:ring-red-400 focus:bg-white outline-none"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 shadow-md transition transform active:scale-95">
+                    🚀 XÁC NHẬN ĐẶT HÀNG
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

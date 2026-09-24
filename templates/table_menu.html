@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đặt Món Tại Bàn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="bg-orange-500 text-white p-4 text-center shadow-md sticky top-0 z-50">
+        <h1 class="text-xl font-bold">🍽️ Thực Đơn Gọi Món</h1>
+        <p class="text-sm">Vị trí: <span class="font-extrabold underline text-yellow-200">{{ table_id }}</span></p>
+    </div>
+
+    <div class="max-w-md mx-auto p-4 space-y-4">
+        <form action="/order-table" method="POST" class="space-y-4">
+            <input type="hidden" name="table_number" value="{{ table_id }}">
+
+            {% for item in foods %}
+            <div class="bg-white rounded-lg shadow-sm border p-3 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <img src="{{ item[4] }}" class="w-16 h-16 object-cover rounded-lg">
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-sm">{{ item[1] }}</h3>
+                        <p class="text-orange-600 font-bold text-sm">{{ "{:,.0f}".format(item[3]) }}đ</p>
+                    </div>
+                </div>
+                <input type="radio" name="food_id" value="{{ item[0] }}" required class="w-5 h-5 text-orange-500">
+            </div>
+            {% endfor %}
+
+            <div class="bg-white p-4 rounded-lg shadow-md border space-y-3 sticky bottom-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Số lượng mua:</label>
+                    <input type="number" name="quantity" min="1" value="1" required class="w-full border p-2 rounded">
+                </div>
+                <button type="submit" class="w-full bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-600 shadow">
+                    🔔 Gửi Order Nhập Bếp ({{ table_id }})
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

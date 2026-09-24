@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán QR MoMo - Đơn Hàng #{{ order[0] if order is sequence else order.id }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse-slow {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.85;
+                transform: scale(1.02);
+            }
+        }
+
+        .qr-card {
+            animation: pulse-slow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white max-w-md w-full rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+
+        <!-- HEADER THANH TOÁN -->
+        <div class="bg-pink-600 p-6 text-white text-center relative">
+            <div class="inline-flex items-center gap-2 bg-white text-pink-600 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2 shadow">
+                <span>📱 Thanh Toán Qua MoMo</span>
+            </div>
+            <h1 class="text-2xl font-black">Mã Đơn Hàng #{{ order[0] if order is sequence else order.id }}</h1>
+            <p class="text-pink-100 text-sm mt-1">Món: <span class="font-bold text-white">{{ order[3] if order is sequence else order.food_name }}</span> (x{{ order[4] if order is sequence else order.quantity }})</p>
+        </div>
+
+        <!-- TỔNG TIỀN -->
+        <div class="bg-pink-50 p-4 text-center border-b border-pink-100">
+            <span class="text-xs font-extrabold text-gray-500 uppercase tracking-widest block">Số Tiền Cần Chuyển Khoản</span>
+            <span class="text-3xl font-black text-pink-600">
+                {{ "{:,.0f}".format(order[5] if order is sequence else order.total_price) }} VNĐ
+            </span>
+        </div>
+
+        <!-- MÃ QR THANH TOÁN -->
+        <div class="p-6 text-center">
+            <div class="inline-block p-3 bg-white rounded-2xl shadow-md border-2 border-pink-500 qr-card">
+                <!-- TẢI ẢNH FILE LOCAL TỪ FOLDER STATIC -->
+                <img src="{{ url_for('static', filename='momo_qr.png') }}"
+                     onerror="this.onerror=null; this.src='https://img.vietqr.io/image/MOMO-{{ momo_settings.get('momo_phone', '0855939726') if momo_settings else '0855939726' }}-compact2.png?amount={{ order[5] if order is sequence else order.total_price }}&addInfo=DON{{ order[0] if order is sequence else order.id }}&accountName={{ momo_settings.get('momo_name', 'MOMO') if momo_settings else 'MOMO' }}';"
+                     alt="Mã QR MoMo Nhận Tiền"
+                     class="w-64 h-64 object-contain rounded-lg">
+            </div>
+
+            <!-- THÔNG TIN TÀI KHOẢN NHẬN TIỀN -->
+            <div class="mt-4 bg-gray-50 p-4 rounded-xl border border-gray-200 text-left space-y-2 text-sm">
+                <div class="flex justify-between items-center border-b pb-1">
+                    <span class="text-gray-500 font-medium">Chủ tài khoản:</span>
+                    <span class="font-extrabold text-gray-800 uppercase">{{ momo_settings.get('momo_name', 'NGUYỄN QUỐC HUY') if momo_settings else 'NGUYỄN QUỐC HUY' }}</span>
+                </div>
+                <div class="flex justify-between items-center border-b pb-1">
+                    <span class="text-gray-500 font-medium">Số điện thoại:</span>
+                    <span class="font-extrabold text-pink-600 font-mono">{{ momo_settings.get('momo_phone', '0855939726') if momo_settings else '0855939726' }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-500 font-medium">Nội dung chuyển khoản:</span>
+                    <span class="font-black text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-200">DON{{ order[0] if order is sequence else order.id }}</span>
+                </div>
+            </div>
+
+            <!-- HƯỚNG DẪN VÀ THAO TÁC XÁC NHẬN -->
+            <div id="status-container" class="mt-5 space-y-3">
+                <div class="flex items-center justify-center gap-2 text-xs font-bold text-gray-500">
+                    <svg class="animate-spin h-4 w-4 text-pink-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Mở ứng dụng MoMo để quét mã & chuyển tiền</span>
+                </div>
+
+                <!-- NÚT KHÁCH XÁC NHẬN ĐÃ CHUYỂN KHOẢN -->
+                <button onclick="confirmPayment()" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-extrabold py-3 px-4 rounded-xl shadow-lg transition duration-200 transform active:scale-95 flex items-center justify-center gap-2">
+                    ✅ Tôi Đã Chuyển Khoản Món Ăn
+                </button>
+            </div>
+
+            <!-- ĐIỀU HƯỚNG -->
+            <div class="mt-4 border-t pt-3">
+                <a href="/" class="text-xs text-gray-400 hover:text-gray-600 font-bold transition"> Quay lại trang chủ / Thực đơn</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT XỬ LÝ TRẠNG THÁI -->
+    <script>
+        function confirmPayment() {
+            const container = document.getElementById('status-container');
+            container.innerHTML = `
+                    <div class="bg-green-100 border border-green-300 text-green-800 p-4 rounded-xl text-center space-y-2">
+                        <div class="text-2xl">🎉</div>
+                        <p class="font-extrabold text-sm">Đã ghi nhận thông báo chuyển khoản!</p>
+                        <p class="text-xs">Hệ thống / Thu ngân sẽ kiểm tra và xác nhận đơn hàng của bạn ngay lập tức.</p>
+                    </div>
+                    <a href="/" class="block w-full bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold py-2.5 rounded-lg text-center transition mt-3">
+                        Trở về Trang Chủ
+                    </a>
+                `;
+        }
+    </script>
+</body>
+</html>

@@ -2,115 +2,56 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Đăng Ký Tài Khoản</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .box {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            width: 330px;
-        }
-
-        h2 {
-            margin-top: 0;
-            text-align: center;
-            color: #333;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-            .form-group label {
-                display: block;
-                margin-bottom: 5px;
-                font-weight: bold;
-            }
-
-            .form-group input, .form-group select {
-                width: 100%;
-                padding: 8px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                box-sizing: border-box;
-            }
-
-        .btn {
-            width: 100%;
-            background: #28a745;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-            .btn:hover {
-                background: #218838;
-            }
-
-        .msg {
-            color: red;
-            text-align: center;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .link {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
-            .link a {
-                color: #007bff;
-                text-decoration: none;
-            }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký Tài Khoản Khách Hàng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-    <div class="box">
-        <h2>📝 Đăng Ký Tài Khoản</h2>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        {% for message in messages %}
-        <div class="msg">{{ message }}</div>
-        {% endfor %}
+<body class="bg-slate-900 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-2xl max-w-md w-full">
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-amber-400 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-user-plus"></i> Đăng Ký Tài Khoản
+            </h2>
+            <p class="text-slate-400 text-xs mt-1">Tạo tài khoản dành cho Khách Hàng</p>
+        </div>
+
+        {% if error %}
+        <div class="bg-red-500/10 border border-red-500/50 text-red-400 text-xs p-3 rounded-lg mb-4 text-center">
+            {{ error }}
+        </div>
         {% endif %}
-        {% endwith %}
-        <form action="/register" method="POST">
-            <div class="form-group">
-                <label>Tài khoản mới:</label>
-                <input type="text" name="tai_khoan" required placeholder="Tạo tên tài khoản">
+
+        <form method="POST" action="/register" class="space-y-4">
+            <div>
+                <label class="block text-slate-300 text-xs font-semibold mb-1">TÊN ĐĂNG NHẬP</label>
+                <input type="text" name="username" required placeholder="Nhập username..."
+                       class="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2.5 text-white text-sm outline-none focus:border-amber-500 transition">
             </div>
-            <div class="form-group">
-                <label>Mật khẩu:</label>
-                <input type="password" name="mat_khau" required placeholder="Tạo mật khẩu">
+
+            <div>
+                <label class="block text-slate-300 text-xs font-semibold mb-1">MẬT KHẨU</label>
+                <input type="password" name="password" required placeholder="••••••••"
+                       class="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2.5 text-white text-sm outline-none focus:border-amber-500 transition">
             </div>
-            <div class="form-group">
-                <label>Loại Tài Khoản (Vai trò):</label>
-                <select name="vai_tro">
-                    <option value="NhanVien">Nhân viên (Chỉ xem đơn hàng)</option>
-                    <option value="Admin">Admin (Toàn quyền hệ thống)</option>
-                </select>
+
+            <div>
+                <label class="block text-slate-300 text-xs font-semibold mb-1">XÁC NHẬN MẬT KHẨU</label>
+                <input type="password" name="confirm_password" required placeholder="••••••••"
+                       class="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2.5 text-white text-sm outline-none focus:border-amber-500 transition">
             </div>
-            <button type="submit" class="btn">Tạo Tài Khoản</button>
+
+            <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2.5 rounded-lg text-sm transition mt-2">
+                ĐĂNG KÝ NGAY
+            </button>
         </form>
-        <div class="link">
-            Đã có tài khoản? <a href="/login">Đăng nhập</a>
+
+        <div class="text-center mt-6 pt-4 border-t border-slate-700/60 text-xs text-slate-400">
+            Đã có tài khoản?
+            <a href="/login" class="text-amber-400 hover:underline font-bold">Đăng nhập tại đây</a>
         </div>
     </div>
+
 </body>
 </html>
